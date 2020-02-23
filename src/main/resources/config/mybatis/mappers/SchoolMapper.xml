@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.school.dao.SchoolMapper" >
+  <resultMap id="BaseResultMap" type="com.example.school.pojo.School" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="key_word" property="keyWord" jdbcType="VARCHAR" />
+    <result column="logo" property="logo" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.example.school.pojo.School" extends="BaseResultMap" >
+    <result column="catalog" property="catalog" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, province, city, level, key_word, logo, introduction
+  </sql>
+  <sql id="Blob_Column_List" >
+    catalog
+  </sql>
+
+  <sql id="searchBy">
+    where 1=1
+    <trim>
+      <if test="id !='' and id !=null">
+        and id  = #{id}
+      </if>
+      <if test="name !='' and name !=null">
+        and name like CONCAT("%",#{name},"%")
+      </if>
+      <if test="province !='' and province != null" >
+        and province=#{province}
+      </if>
+      <if test="city !='' and city != null" >
+        and city=#{city}
+      </if>
+      <if test="level !='' and level != null" >
+        and level =#{level}
+      </if>
+      <if test="keyWord !='' and keyWord != null" >
+        and key_word like CONCAT("%",#{keyWord},"%")
+      </if>
+    </trim>
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from school
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from school
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.school.pojo.School" >
+    insert into school (id, name, province, 
+      city, level, key_word, 
+      logo, introduction, catalog
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, #{keyWord,jdbcType=VARCHAR}, 
+      #{logo,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, #{catalog,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.school.pojo.School" >
+    insert into school
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="keyWord != null" >
+        key_word,
+      </if>
+      <if test="logo != null" >
+        logo,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+      <if test="catalog != null" >
+        catalog,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="keyWord != null" >
+        #{keyWord,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null" >
+        #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog != null" >
+        #{catalog,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.school.pojo.School" >
+    update school
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="keyWord != null" >
+        key_word = #{keyWord,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null" >
+        logo = #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog != null" >
+        catalog = #{catalog,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.school.pojo.School" >
+    update school
+    set name = #{name,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      key_word = #{keyWord,jdbcType=VARCHAR},
+      logo = #{logo,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      catalog = #{catalog,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.school.pojo.School" >
+    update school
+    set name = #{name,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      key_word = #{keyWord,jdbcType=VARCHAR},
+      logo = #{logo,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="searchSchool" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from school s
+    <include refid="searchBy"/>
+    <if test="tabIds != null" >
+
+    and s.id in (select st.school_id from school_tab st where 1=1
+      <foreach collection="tabIds" index="index" item="item" open=""
+               separator="" close="">
+        or st.tab_id =#{item.id}
+      </foreach>
+
+      GROUP BY st.school_id
+
+      having count(st.school_id) > #{listSize}
+      )
+     order  by  s.id
+    </if>
+  </select>
+</mapper>
